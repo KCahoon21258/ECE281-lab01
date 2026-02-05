@@ -11,7 +11,7 @@
 --| ---------------------------------------------------------------------------
 --|
 --| FILENAME      : thirtyOneDayMonth.vhd
---| AUTHOR(S)     : Capt Dan Johnson, ***Your Name Here***
+--| AUTHOR(S)     : Capt Dan Johnson, C3C Kimberly Cahoon
 --| CREATED       : 12/12/2019 Last Modified 06/24/2020
 --| DESCRIPTION   :  This file implements the thirtyOneDaMonth lab.  Using a 4
 --| switch input, the circuit will light up whenever the 4 switches represent a
@@ -56,24 +56,42 @@ library ieee;
 entity thirtyOneDayMonth is 
   port(
 	i_A : in std_logic; -- one of four inputs
+	i_B : in std_logic;
+	i_C : in std_logic;
+	i_D : in std_logic;
+	o_Y : out std_logic --output
 	
 	
 	
-						-- output
+						
   );
 end thirtyOneDayMonth;
 
 architecture thirtyOneDayMonth_arch of thirtyOneDayMonth is 
 	-- include components declarations and signals
-	
+	signal w_sel : std_logic_vector (2 downto 0); -- MUX sel
 	--signals internal to the architecture are declared and initialized such as w_sel
   
 begin
 	-- CONCURRENT STATEMENTS---------------------------------------
 	--assigning names to reflect original schematics (for ease of understanding if you wish to)
-	w_sel(0) <= i_C;	-- one
+	w_sel(0) <= i_C;	-- one LSB
+	w_sel(1) <= i_B;    
+	w_sel(2) <= i_A;    -- MSB
 	--finish assigning signals
-	
+	with w_sel select
+	   o_Y <= i_D when "000", -- D0
+	          i_D when "001", -- D1
+	          i_D when "010", -- D2
+	          i_D when "011", -- D3
+	          not i_D when "100", -- D4
+	          not i_D when "101", -- D5
+	          not i_D when "110", -- D6
+	          not i_D when "111", --D7
+	          '0' when others;
+	          
+	          --Helped figure out this logic from startingelectronics.org and VHDL ref shee--
+	          
 	--enter your logic here to implement the mux.  See VHDL reference sheet for MUX syntax.	
 	---------------------------------------------------------------	
 end thirtyOneDayMonth_arch;
